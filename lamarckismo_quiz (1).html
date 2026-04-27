@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Lamarckismo | Evolución Biológica</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;1,300&display=swap');
+
+  :root {
+    --bg: #0a0e14;
+    --surface: #111820;
+    --card: #16202e;
+    --border: #1e3048;
+    --accent: #e8a020;
+    --accent2: #5bc4a0;
+    --accent3: #e05050;
+    --text: #d8e4f0;
+    --muted: #6a8aaa;
+    --gold: #f5c842;
+    --silver: #b0c4de;
+    --bronze: #cd7f32;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse at 20% 20%, rgba(232,160,32,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(91,196,160,0.05) 0%, transparent 50%);
+  }
+
+  /* HEADER */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    padding: 18px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+
+  .logo {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .logo span { color: var(--accent2); font-weight: 300; }
+
+  .header-nav { display: flex; gap: 8px; }
+
+  .nav-btn {
+    background: transparent;
+    border: 1.5px solid var(--border);
+    color: var(--muted);
+    padding: 8px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover, .nav-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(232,160,32,0.08);
+  }
+
+  /* SCREENS */
+  .screen { display: none; max-width: 860px; margin: 0 auto; padding: 40px 20px; }
+  .screen.active { display: block; }
+
+  /* LOGIN SCREEN */
+  .welcome-hero {
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+
+  .dino-icon {
+    font-size: 5rem;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 0 30px rgba(232,160,32,0.4));
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  .welcome-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    line-height: 1.1;
+    margin-bottom: 8px;
+  }
+
+  .welcome-hero .subtitle {
+    font-size: 1.1rem;
+    color: var(--muted);
+    font-style: italic;
+    margin-bottom: 40px;
+  }
+
+  .form-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 36px;
+    max-width: 420px;
+    margin: 0 auto;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  }
+
+  .form-card label {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+    margin-top: 20px;
+  }
+
+  .form-card label:first-child { margin-top: 0; }
+
+  .form-card input, .form-card select {
+    width: 100%;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-family: 'Source Serif 4', serif;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+    outline: none;
+  }
+
+  .form-card input:focus, .form-card select:focus {
+    border-color: var(--accent);
+  }
+
+  .form-card select option { background: var(--surface); }
+
+  .btn-primary {
+    width: 100%;
+    margin-top: 28px;
+    background: var(--accent);
+    color: #000;
+    border: none;
+    padding: 14px;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-primary:hover { background: #f0b030; transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(0); }
+
+  /* QUIZ SCREEN */
+  .quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 16px 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .student-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.1rem;
+    color: var(--accent2);
+    letter-spacing: 1px;
+  }
+
+  .progress-info {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .progress-bar-wrap {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+
+  .q-number {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .q-tag {
+    background: rgba(232,160,32,0.15);
+    border: 1px solid rgba(232,160,32,0.3);
+    color: var(--accent);
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+  }
+
+  .q-text {
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text);
+    margin-bottom: 24px;
+  }
+
+  .options-grid {
+    display: grid;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    padding: 14px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    transition: all 0.2s;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: rgba(232,160,32,0.06);
+    transform: translateX(3px);
+  }
+
+  .option-letter {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(232,160,32,0.15);
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .option-btn.selected { border-color: var(--accent); background: rgba(232,160,32,0.1); }
+  .option-btn.correct { border-color: var(--accent2); background: rgba(91,196,160,0.12); }
+  .option-btn.wrong { border-color: var(--accent3); background: rgba(224,80,80,0.1); }
+  .option-btn.correct .option-letter { background: rgba(91,196,160,0.25); color: var(--accent2); }
+  .option-btn.wrong .option-letter { background: rgba(224,80,80,0.2); color: var(--accent3); }
+  .option-btn:disabled { cursor: default; }
+
+  .feedback-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity:0; transform: translateY(-6px); } to { opacity:1; transform: translateY(0); } }
+
+  .feedback-box.correct { background: rgba(91,196,160,0.1); border: 1px solid rgba(91,196,160,0.3); color: var(--accent2); }
+  .feedback-box.wrong { background: rgba(224,80,80,0.08); border: 1px solid rgba(224,80,80,0.25); color: #e07070; }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
+  }
+
+  .btn-next {
+    background: transparent;
+    border: 2px solid var(--accent2);
+    color: var(--accent2);
+    padding: 12px 28px;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: none;
+  }
+
+  .btn-next:hover { background: rgba(91,196,160,0.12); }
+
+  /* RESULTS SCREEN */
+  .results-hero {
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .score-ring {
+    width: 160px;
+    height: 160px;
+    margin: 0 auto 24px;
+    position: relative;
+  }
+
+  .score-ring svg { transform: rotate(-90deg); }
+
+  .score-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+  }
+
+  .score-number {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .score-label { font-size: 0.75rem; color: var(--muted); letter-spacing: 1px; }
+
+  .result-message {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+
+  .result-sub { color: var(--muted); font-style: italic; margin-bottom: 32px; }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .stat-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .stat-val {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent2);
+  }
+
+  .stat-lbl { font-size: 0.8rem; color: var(--muted); letter-spacing: 1px; margin-top: 4px; }
+
+  .btn-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn-outline {
+    background: transparent;
+    border: 2px solid var(--border);
+    color: var(--muted);
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--accent2); color: var(--accent2); }
+  .btn-save { border-color: var(--accent); color: var(--accent); }
+  .btn-save:hover { border-color: var(--accent); color: var(--accent); background: rgba(232,160,32,0.08); }
+
+  /* LEADERBOARD */
+  .lb-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .lb-sub { text-align: center; color: var(--muted); font-style: italic; margin-bottom: 32px; }
+
+  .lb-podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 12px;
+    margin-bottom: 36px;
+    padding: 0 20px;
+  }
+
+  .podium-block {
+    flex: 1;
+    max-width: 160px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    padding: 20px 10px 12px;
+    position: relative;
+  }
+
+  .podium-block.first { min-height: 160px; border-color: var(--gold); background: rgba(245,200,66,0.06); }
+  .podium-block.second { min-height: 120px; border-color: var(--silver); background: rgba(176,196,222,0.04); }
+  .podium-block.third { min-height: 100px; border-color: var(--bronze); background: rgba(205,127,50,0.04); }
+
+  .podium-crown { font-size: 1.8rem; margin-bottom: 6px; }
+  .podium-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    word-break: break-word;
+  }
+
+  .podium-block.first .podium-name { color: var(--gold); }
+  .podium-block.second .podium-name { color: var(--silver); }
+  .podium-block.third .podium-name { color: var(--bronze); }
+
+  .podium-score {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
+  .podium-pos {
+    position: absolute;
+    bottom: -14px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  .podium-block.first .podium-pos { background: var(--gold); color: #000; }
+  .podium-block.second .podium-pos { background: var(--silver); color: #000; }
+  .podium-block.third .podium-pos { background: var(--bronze); color: #000; }
+
+  .lb-table-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 20px;
+  }
+
+  .lb-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .lb-table thead { background: var(--surface); }
+
+  .lb-table th {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 14px 20px;
+    text-align: left;
+  }
+
+  .lb-table td {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 0.95rem;
+  }
+
+  .lb-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  .rank-badge {
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--border);
+    color: var(--muted);
+  }
+
+  .rank-badge.r1 { border-color: var(--gold); color: var(--gold); background: rgba(245,200,66,0.1); }
+  .rank-badge.r2 { border-color: var(--silver); color: var(--silver); background: rgba(176,196,222,0.08); }
+  .rank-badge.r3 { border-color: var(--bronze); color: var(--bronze); background: rgba(205,127,50,0.08); }
+
+  .score-pill {
+    background: rgba(91,196,160,0.12);
+    border: 1px solid rgba(91,196,160,0.25);
+    color: var(--accent2);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  .pct-bar-bg {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 80px;
+  }
+
+  .pct-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 3px;
+  }
+
+  .curso-badge {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .lb-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+    font-style: italic;
+  }
+
+  .empty-state .icon { font-size: 3rem; margin-bottom: 16px; }
+
+  /* Saved notice */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: var(--accent2);
+    color: #000;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 999;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* Review screen */
+  .review-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 14px;
+  }
+
+  .review-item.correct-item { border-left: 4px solid var(--accent2); }
+  .review-item.wrong-item { border-left: 4px solid var(--accent3); }
+
+  .review-q { font-size: 0.95rem; color: var(--text); margin-bottom: 10px; }
+
+  .review-answers { display: flex; flex-direction: column; gap: 4px; }
+
+  .review-ans { font-size: 0.85rem; display: flex; align-items: center; gap: 8px; }
+  .review-ans .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .review-ans.user-ans .dot { background: var(--accent); }
+  .review-ans.correct-ans .dot { background: var(--accent2); }
+
+  @media (max-width: 600px) {
+    .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .stat-val { font-size: 1.4rem; }
+    .welcome-hero h1 { font-size: 2rem; }
+    .lb-podium { gap: 6px; }
+    .lb-table th:nth-child(4), .lb-table td:nth-child(4) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">🧬 Lamarck<span>Quiz</span></div>
+  <div class="header-nav">
+    <button class="nav-btn active" id="navQuiz" onclick="showTab('quiz')">Quiz</button>
+    <button class="nav-btn" id="navLb" onclick="showTab('leaderboard')">🏆 Ranking</button>
+  </div>
+</header>
+
+<div id="tabQuiz" style="display:block">
+
+  <!-- LOGIN -->
+  <div class="screen active" id="screenLogin">
+    <div class="welcome-hero">
+      <div class="dino-icon">🦕</div>
+      <h1>Teoría de<br>Lamarck</h1>
+      <p class="subtitle">Quiz de Evolución Biológica · Nivel I Medio · Tipo PAES</p>
+    </div>
+    <div class="form-card">
+      <label>Tu nombre completo</label>
+      <input type="text" id="inputNombre" placeholder="Escribe tu nombre..." maxlength="60">
+      <label>Curso</label>
+      <select id="inputCurso">
+        <option value="">— Selecciona tu curso —</option>
+        <option>I Medio A</option>
+        <option>I Medio B</option>
+        <option>I Medio C</option>
+        <option>I Medio D</option>
+        <option>Otro</option>
+      </select>
+      <button class="btn-primary" onclick="startQuiz()">▶ Comenzar Quiz</button>
+    </div>
+  </div>
+
+  <!-- QUIZ -->
+  <div class="screen" id="screenQuiz">
+    <div class="quiz-header">
+      <div class="student-badge" id="badgeName">👤 Estudiante</div>
+      <div class="progress-info" id="progressText">Pregunta 1 de 20</div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar" style="width:5%"></div>
+    </div>
+    <div class="question-card" id="questionCard">
+      <div class="q-number" id="qNumber"></div>
+      <div class="q-text" id="qText"></div>
+      <div class="options-grid" id="optionsGrid"></div>
+      <div class="feedback-box" id="feedbackBox"></div>
+    </div>
+    <div class="quiz-nav">
+      <button class="btn-next" id="btnNext" onclick="nextQuestion()">Siguiente →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="screen" id="screenResults">
+    <div class="results-hero">
+      <div class="score-ring">
+        <svg viewBox="0 0 160 160" width="160" height="160">
+          <circle cx="80" cy="80" r="68" fill="none" stroke="#1e3048" stroke-width="12"/>
+          <circle cx="80" cy="80" r="68" fill="none" stroke="url(#grad)" stroke-width="12"
+            stroke-dasharray="427" stroke-dashoffset="427" id="scoreCircle" stroke-linecap="round"/>
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#5bc4a0"/>
+              <stop offset="100%" style="stop-color:#e8a020"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="score-text">
+          <div class="score-number" id="scoreNum">0</div>
+          <div class="score-label">/ 20</div>
+        </div>
+      </div>
+      <div class="result-message" id="resultMsg">Resultado</div>
+      <div class="result-sub" id="resultSub">—</div>
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-val" id="statCorr">0</div>
+          <div class="stat-lbl">✅ Correctas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="statWrong">0</div>
+          <div class="stat-lbl">❌ Incorrectas</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-val" id="statPct">0%</div>
+          <div class="stat-lbl">📊 Logro</div>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn-outline btn-save" onclick="saveResult()">💾 Guardar resultado</button>
+        <button class="btn-outline" onclick="reviewAnswers()">📋 Revisar respuestas</button>
+        <button class="btn-outline" onclick="restartQuiz()">🔄 Reintentar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <div class="screen" id="screenReview">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:24px;">
+      <h2 style="font-family:'Oswald',sans-serif; font-size:1.6rem; color:var(--accent); letter-spacing:2px; text-transform:uppercase;">Revisión de Respuestas</h2>
+      <button class="btn-outline" onclick="goBack()">← Volver</button>
+    </div>
+    <div id="reviewList"></div>
+  </div>
+
+</div><!-- end tabQuiz -->
+
+<!-- LEADERBOARD TAB -->
+<div id="tabLeaderboard" style="display:none; max-width:860px; margin:0 auto; padding:40px 20px;">
+  <div class="lb-title">🏆 Ranking de la Clase</div>
+  <div class="lb-sub" id="lbSub">Teoría Lamarckismo · I Medio</div>
+
+  <div class="lb-podium" id="lbPodium"></div>
+
+  <div class="lb-controls">
+    <button class="btn-outline" onclick="clearLeaderboard()" style="font-size:0.8rem; padding:8px 16px; color:var(--accent3); border-color:var(--accent3)">🗑 Limpiar tabla</button>
+    <button class="btn-outline" onclick="renderLeaderboard()" style="font-size:0.8rem; padding:8px 16px;">🔄 Actualizar</button>
+  </div>
+
+  <div class="lb-table-wrap">
+    <table class="lb-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Estudiante</th>
+          <th>Correctas</th>
+          <th>Curso</th>
+          <th>% Logro</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody id="lbBody"></tbody>
+    </table>
+    <div class="empty-state" id="lbEmpty" style="display:none;">
+      <div class="icon">📊</div>
+      <p>Aún no hay resultados guardados.<br>¡Completa el quiz y guarda tu puntaje!</p>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">✅ Guardado exitosamente</div>
+
+<script>
+// ===================== PREGUNTAS =====================
+const PREGUNTAS = [
+  {
+    tema: "Postulado",
+    texto: "Según Lamarck, ¿cuál es el principal motor del cambio evolutivo en los organismos?",
+    opciones: [
+      "La selección natural que favorece a los más adaptados",
+      "El uso y desuso de los órganos a lo largo de la vida del individuo",
+      "Las mutaciones genéticas aleatorias acumuladas en generaciones",
+      "El aislamiento geográfico que separa poblaciones"
+    ],
+    correcta: 1,
+    explicacion: "El primer postulado de Lamarck establece que el uso constante de un órgano lo desarrolla, mientras que el desuso provoca su atrofia y eventual desaparición."
+  },
+  {
+    tema: "Postulado",
+    texto: "El segundo postulado de Lamarck, conocido como la 'herencia de los caracteres adquiridos', plantea que:",
+    opciones: [
+      "Solo se heredan los rasgos presentes desde el nacimiento del individuo",
+      "Los cambios anatómicos producidos por el ambiente no se transmiten a la descendencia",
+      "Los cambios físicos que adquiere un organismo durante su vida se transmiten a sus hijos",
+      "La herencia depende exclusivamente de la información contenida en los genes"
+    ],
+    correcta: 2,
+    explicacion: "La herencia de los caracteres adquiridos es el segundo postulado lamarckiano: los cambios morfológicos que experimenta un organismo a lo largo de su vida son transmitidos a su progenie."
+  },
+  {
+    tema: "Ejemplo clásico",
+    texto: "Lamarck usó la jirafa como ejemplo para explicar su teoría. Según su interpretación, el cuello largo de las jirafas se debe a que:",
+    opciones: [
+      "Las jirafas con cuello corto fueron eliminadas por depredadores, dejando solo las de cuello largo",
+      "Una mutación genética aleatoria produjo cuellos más largos en algunas jirafas",
+      "Generación tras generación, las jirafas estiraron el cuello para alcanzar hojas altas, desarrollándolo más",
+      "Las jirafas migraron hacia ambientes donde la vegetación alta era exclusiva"
+    ],
+    correcta: 2,
+    explicacion: "Para Lamarck, las jirafas estiraban el cuello (uso) para alcanzar hojas en árboles altos; esa característica adquirida —cuello más largo— se heredaba a la descendencia, acumulándose a lo largo de generaciones."
+  },
+  {
+    tema: "Ejemplo clásico",
+    texto: "Según la teoría de Lamarck, ¿qué le ocurriría a los topos que viven permanentemente bajo tierra y no usan sus ojos?",
+    opciones: [
+      "Sus ojos evolucionarían para ver mejor en la oscuridad gracias a una adaptación positiva",
+      "Sus ojos se atrofiarían por desuso y con el tiempo esta característica se transmitiría a sus crías",
+      "Sus ojos permanecerían iguales, ya que solo cambian los caracteres que se usan más",
+      "Los topos desarrollarían oídos más sensibles en lugar de ojos, por un intercambio de energía"
+    ],
+    correcta: 1,
+    explicacion: "El principio del desuso predice que los órganos que no se utilizan se degeneran progresivamente. En el caso del topo, sus ojos —poco útiles bajo tierra— se atrofiarían y esta característica adquirida se heredaría."
+  },
+  {
+    tema: "Contexto histórico",
+    texto: "Jean-Baptiste Lamarck publicó su teoría evolutiva principalmente en la obra 'Philosophie Zoologique' (1809). ¿Qué caracteriza a este contexto histórico-científico?",
+    opciones: [
+      "Ya se conocía el ADN como material hereditario, lo que apoyó su teoría",
+      "Darwin ya había publicado 'El origen de las especies', influyendo directamente en Lamarck",
+      "La genética mendeliana era la teoría dominante en ese momento",
+      "Se desconocía el mecanismo molecular de la herencia; Lamarck elaboró su teoría sin ese conocimiento"
+    ],
+    correcta: 3,
+    explicacion: "En 1809, la genética no existía como ciencia; Mendel publicó sus trabajos recién en 1865 y el ADN fue identificado como material hereditario en el siglo XX. Lamarck formuló su teoría sin acceso a esos conocimientos."
+  },
+  {
+    tema: "Tipo PAES",
+    texto: "Un estudiante afirma: 'Si un deportista desarrolla músculos muy grandes debido a su entrenamiento, sus hijos nacerán también con músculos más desarrollados'. Esta afirmación es:",
+    opciones: [
+      "Correcta, porque concuerda con la teoría de la selección natural de Darwin",
+      "Correcta, ya que corresponde al postulado lamarckiano de herencia de caracteres adquiridos",
+      "Incorrecta, porque según Lamarck solo se heredan los caracteres morfológicos, no los fisiológicos",
+      "Incorrecta, porque la ciencia actual demuestra que los caracteres adquiridos durante la vida no alteran el material genético que se hereda"
+    ],
+    correcta: 3,
+    explicacion: "Desde la genética moderna sabemos que los cambios fenotípicos adquiridos (como la masa muscular desarrollada por entrenamiento) no modifican el genoma de las células reproductivas, por lo que no se heredan. Esta es la principal refutación del lamarckismo."
+  },
+  {
+    tema: "Tipo PAES",
+    texto: "Un investigador estudia una población de peces de cueva que perdió la visión hace miles de años. ¿Qué explicación daría Lamarck a este fenómeno?",
+    opciones: [
+      "Una mutación aleatoria eliminó los genes de desarrollo ocular y fue seleccionada positivamente",
+      "Al no utilizar sus ojos en la oscuridad, generación tras generación los ojos se atrofiaron y esa característica se heredó",
+      "Los peces con ojos grandes tenían mayor desventaja energética, siendo eliminados por selección natural",
+      "El ambiente oscuro indujo cambios directos en el ADN que bloquearon los genes oculares"
+    ],
+    correcta: 1,
+    explicacion: "Lamarck explicaría la pérdida de ojos en peces de cueva mediante el principio del desuso: al no ser utilizados, los ojos se degeneraron progresivamente, y esa característica adquirida fue heredada por la descendencia durante miles de generaciones."
+  },
+  {
+    tema: "Comparación teórica",
+    texto: "¿Cuál es la diferencia fundamental entre la teoría de Lamarck y la teoría de Darwin-Wallace sobre el mecanismo del cambio evolutivo?",
+    opciones: [
+      "Lamarck propone cambios en el individuo transmitidos a la descendencia; Darwin propone variación preexistente y selección diferencial",
+      "Lamarck acepta la extinción de especies; Darwin la niega completamente",
+      "Darwin considera que el ambiente genera los cambios; Lamarck que estos ocurren al azar",
+      "Lamarck y Darwin coinciden en que la selección natural es el motor del cambio evolutivo"
+    ],
+    correcta: 0,
+    explicacion: "La diferencia central es que Lamarck propone que el individuo cambia durante su vida (uso/desuso) y transmite esos cambios, mientras que Darwin plantea que la variación ya existe en la población y el ambiente selecciona a los individuos más aptos para reproducirse."
+  },
+  {
+    tema: "Postulado",
+    texto: "Lamarck propuso que los seres vivos poseen una 'tendencia intrínseca hacia la perfección'. Esto implica que:",
+    opciones: [
+      "Los organismos evolucionan de manera aleatoria sin dirección definida",
+      "Solo los mamíferos muestran tendencias evolutivas progresivas",
+      "Los organismos tienen una tendencia natural a aumentar su complejidad a lo largo del tiempo evolutivo",
+      "La evolución solo ocurre cuando el ambiente cambia drásticamente"
+    ],
+    correcta: 2,
+    explicacion: "Lamarck concebía la evolución como un proceso progresivo y dirigido: los organismos tendrían una fuerza interna que los impulsa hacia niveles de organización cada vez más complejos, de organismos simples hacia formas más elaboradas."
+  },
+  {
+    tema: "Tipo PAES",
+    texto: "Lee el siguiente enunciado: 'Las serpientes perdieron sus patas porque sus antepasados dejaron de usarlas al adoptar un estilo de vida deslizándose por el suelo'. Esta afirmación corresponde a:",
+    opciones: [
+      "La teoría sintética de la evolución",
+      "El principio de selección natural de Darwin",
+      "La teoría de Lamarck aplicando el principio de uso y desuso",
+      "La teoría del diseño inteligente"
+    ],
+    correcta: 2,
+    explicacion: "Esta explicación es un ejemplo directo del lamarckismo: los órganos (patas) se atrofiaron por desuso al cambiar el comportamiento locomotor de los antepasados de las serpientes, y esa pérdida se transmitió hereditariamente."
+  },
+  {
+    tema: "Refutación",
+    texto: "August Weismann realizó un experimento en el que cortó las colas a ratones durante varias generaciones. Sus crías siempre nacieron con cola normal. ¿Qué conclusión se extrae de este experimento en relación con Lamarck?",
+    opciones: [
+      "Confirma que el desuso de la cola llevará eventualmente a su desaparición evolutiva",
+      "Refuta la herencia de los caracteres adquiridos, ya que una modificación forzada no se hereda",
+      "Demuestra que el ambiente puede inducir cambios morfológicos permanentes en los ratones",
+      "Apoya el lamarckismo porque los ratones sin cola sobrevivieron mejor"
+    ],
+    correcta: 1,
+    explicacion: "El experimento de Weismann es una refutación clásica del lamarckismo: aunque modificó físicamente a los ratones durante 22 generaciones, las crías siempre nacieron con cola, demostrando que los cambios adquiridos no se transmiten."
+  },
+  {
+    tema: "Ejemplo cotidiano",
+    texto: "Según la lógica lamarckiana, si en una región las plantas de una especie crecen en suelos con poca agua durante muchas generaciones y desarrollan raíces más profundas, ¿qué ocurriría con la descendencia?",
+    opciones: [
+      "La descendencia nacería con raíces de tamaño idéntico al original, sin ningún cambio",
+      "Solo los individuos que vivan en ese suelo específico tendrán raíces más profundas",
+      "La descendencia heredaría raíces más profundas como característica adquirida por el ambiente",
+      "El cambio en las raíces no tendría ninguna relación con el proceso evolutivo según Lamarck"
+    ],
+    correcta: 2,
+    explicacion: "Desde la perspectiva lamarckiana, el ambiente (suelo seco) induce un uso mayor de las raíces (crecen más profundo para buscar agua); esa característica adquirida se heredaría, haciendo que la descendencia nazca ya con raíces más profundas."
+  },
+  {
+    tema: "Tipo PAES",
+    texto: "Una especie de ave insectívora habita en una isla donde los insectos están escondidos bajo cortezas de árbol. Tras muchas generaciones, las aves desarrollan picos más largos y curvos. ¿Qué explicación darían Darwin y Lamarck respectivamente a este fenómeno?",
+    opciones: [
+      "Darwin: el ambiente modificó el pico directamente. Lamarck: el azar generó la variación del pico",
+      "Darwin: individuos con pico más largo ya existían y se reprodujeron más; Lamarck: el estiramiento del pico se heredó",
+      "Ambos coinciden en que la selección natural eliminó a las aves con pico corto",
+      "Darwin: solo las aves jóvenes cambian su pico; Lamarck: el cambio ocurre en toda la población simultáneamente"
+    ],
+    correcta: 1,
+    explicacion: "Darwin diría que en la población original ya existía variación en el largo del pico; los individuos con pico más largo sobrevivieron y se reprodujeron más (selección natural). Lamarck diría que las aves estiraron el pico por uso, heredando esa característica sus crías."
+  },
+  {
+    tema: "Postulado",
+    texto: "Para Lamarck, el cambio evolutivo es un proceso que ocurre:",
+    opciones: [
+      "Únicamente en individuos aislados de una misma especie",
+      "De forma gradual en el individuo a lo largo de su vida, acumulándose en generaciones sucesivas",
+      "De forma brusca y repentina en una sola generación, similar a las mutaciones modernas",
+      "Exclusivamente cuando las condiciones climáticas cambian drásticamente"
+    ],
+    correcta: 1,
+    explicacion: "El lamarckismo concibe la evolución como un proceso gradual: los cambios se acumulan en el individuo durante su vida y, al heredarse a la descendencia, se van sumando generación tras generación."
+  },
+  {
+    tema: "Tipo PAES - Habilidad: Análisis",
+    texto: "Analiza el siguiente dato experimental: En un estudio con ratones, se los entrenó a resolver laberintos. Los ratones mejoraron su desempeño. Sus crías NO nacieron con mayor habilidad para resolver laberintos. ¿Qué conclusión apoya este resultado?",
+    opciones: [
+      "Que la selección natural opera sobre el comportamiento aprendido",
+      "Que las habilidades adquiridas durante la vida no son heredables, en contradicción con la propuesta lamarckiana",
+      "Que Lamarck tenía razón porque los ratones sí aprendieron a resolver laberintos",
+      "Que la evolución no ocurre en organismos de vida corta como los ratones"
+    ],
+    correcta: 1,
+    explicacion: "Este experimento demuestra que las habilidades aprendidas durante la vida (caracteres adquiridos por experiencia) no se transmiten genéticamente a la descendencia, lo cual contradice directamente el segundo postulado de Lamarck."
+  },
+  {
+    tema: "Epigenética",
+    texto: "La epigenética moderna ha mostrado que algunos cambios en la expresión génica pueden transmitirse a la siguiente generación sin modificar el ADN. ¿Cómo se relaciona esto con la teoría de Lamarck?",
+    opciones: [
+      "La epigenética demuestra que Lamarck tenía razón en todos sus postulados",
+      "No tiene ninguna relación con el lamarckismo",
+      "Sugiere que algunos principios lamarckianos pueden tener una base molecular parcial, aunque el mecanismo es distinto al propuesto por Lamarck",
+      "La epigenética refuta completamente todas las ideas de Darwin pero confirma el lamarckismo"
+    ],
+    correcta: 2,
+    explicacion: "La epigenética muestra que marcas como la metilación del ADN pueden transmitirse entre generaciones en algunos casos. Esto no valida el lamarckismo clásico (el mecanismo es completamente diferente), pero sí genera debate sobre la herencia de estados adquiridos a nivel molecular."
+  },
+  {
+    tema: "Tipo PAES - Habilidad: Aplicación",
+    texto: "Una estudiante observa que en zonas contaminadas de Chile, algunos insectos han desarrollado resistencia a pesticidas en pocas generaciones. ¿Cuál teoría explica mejor este fenómeno y por qué?",
+    opciones: [
+      "Lamarck, porque los insectos usaron mecanismos corporales para adaptarse al pesticida y lo heredaron",
+      "Darwin, porque individuos con variaciones genéticas que les daban resistencia ya existían y sobrevivieron para reproducirse más",
+      "Lamarck y Darwin, ya que ambas teorías explican igualmente bien la resistencia a pesticidas",
+      "Ninguna teoría evolutiva, ya que la resistencia a pesticidas es solo un fenómeno químico"
+    ],
+    correcta: 1,
+    explicacion: "La resistencia a pesticidas es un ejemplo clásico de selección natural darwiniana: en la población original existían individuos con mutaciones que conferían resistencia; al aplicar el pesticida, esos individuos sobrevivieron y se reprodujeron, aumentando la frecuencia del rasgo."
+  },
+  {
+    tema: "Contexto chileno",
+    texto: "En la zona costera de Chile, algunas poblaciones de lobos marinos pasan largas horas en tierra. Según Lamarck, ¿qué predicción haría sobre las aletas de estas poblaciones en el futuro?",
+    opciones: [
+      "Las aletas se harían más eficientes para nadar, ya que el descanso en tierra los motiva a nadar más fuerte",
+      "Las aletas no cambiarían, ya que Lamarck solo aplicaba su teoría a vertebrados terrestres",
+      "Las aletas traseras se atrofiarían por desuso en tierra, y esa característica se heredaría a las crías",
+      "El desarrollo de nuevas aletas dependería exclusivamente de la presión de depredadores marinos"
+    ],
+    correcta: 2,
+    explicacion: "Lamarck predice que el desuso de las aletas traseras al pasar más tiempo en tierra llevaría a su atrofia gradual, característica que se transmitiría a la descendencia, potencialmente dando lugar a una especie más adaptada a la vida terrestre."
+  },
+  {
+    tema: "Tipo PAES - Habilidad: Evaluación",
+    texto: "Evalúa la siguiente afirmación: 'La teoría de Lamarck fue totalmente incorrecta y no aportó nada a la ciencia'. ¿Es esta afirmación completamente válida?",
+    opciones: [
+      "Sí, porque todos sus postulados han sido refutados y carece de valor científico",
+      "No, porque aunque el mecanismo propuesto es incorrecto, Lamarck fue el primero en proponer un mecanismo sistemático de cambio evolutivo, contribuyendo al pensamiento evolutivo",
+      "Sí, porque Darwin publicó una teoría superior antes que Lamarck",
+      "No, porque actualmente la comunidad científica ha aceptado todos los postulados de Lamarck"
+    ],
+    correcta: 1,
+    explicacion: "La afirmación es demasiado radical. Aunque el mecanismo del uso/desuso y la herencia de caracteres adquiridos han sido refutados, Lamarck realizó una contribución histórica fundamental: fue el primer naturalista en proponer un mecanismo coherente y sistemático para explicar el cambio evolutivo."
+  },
+  {
+    tema: "Síntesis",
+    texto: "¿Cuál de las siguientes opciones resume correctamente los DOS postulados principales de Lamarck?",
+    opciones: [
+      "I. La selección natural elimina a los menos aptos. II. Los rasgos favorables se heredan.",
+      "I. El uso desarrolla los órganos y el desuso los atrofia. II. Los caracteres adquiridos durante la vida se heredan a la descendencia.",
+      "I. Las mutaciones son la fuente de variación. II. El ambiente selecciona las variaciones más adecuadas.",
+      "I. Los organismos tienden hacia la extinción. II. Solo los mejor adaptados sobreviven el tiempo suficiente para reproducirse."
+    ],
+    correcta: 1,
+    explicacion: "Los dos pilares del lamarckismo son: (1) el principio de uso y desuso —los órganos usados se desarrollan, los no usados se atrofian— y (2) la herencia de los caracteres adquiridos —los cambios producidos en el individuo se transmiten a sus descendientes."
+  }
+];
+
+// ===================== ESTADO =====================
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let studentName = '';
+let studentCurso = '';
+let userAnswers = [];
+let previousScreen = 'screenResults';
+
+function showTab(tab) {
+  document.getElementById('tabQuiz').style.display = tab === 'quiz' ? 'block' : 'none';
+  document.getElementById('tabLeaderboard').style.display = tab === 'leaderboard' ? 'block' : 'none';
+  document.getElementById('navQuiz').classList.toggle('active', tab === 'quiz');
+  document.getElementById('navLb').classList.toggle('active', tab === 'leaderboard');
+  if (tab === 'leaderboard') renderLeaderboard();
+}
+
+function startQuiz() {
+  const nombre = document.getElementById('inputNombre').value.trim();
+  const curso = document.getElementById('inputCurso').value;
+  if (!nombre) { alert('Por favor ingresa tu nombre.'); return; }
+  if (!curso) { alert('Por favor selecciona tu curso.'); return; }
+  studentName = nombre;
+  studentCurso = curso;
+  currentQ = 0;
+  score = 0;
+  userAnswers = [];
+  showScreen('screenQuiz');
+  document.getElementById('badgeName').textContent = '👤 ' + nombre;
+  renderQuestion();
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function renderQuestion() {
+  const q = PREGUNTAS[currentQ];
+  const total = PREGUNTAS.length;
+  const pct = ((currentQ) / total * 100).toFixed(0);
+
+  document.getElementById('progressText').textContent = `Pregunta ${currentQ+1} de ${total}`;
+  document.getElementById('progressBar').style.width = `${Math.max(5, pct)}%`;
+  document.getElementById('qNumber').innerHTML = `PREGUNTA ${currentQ+1} <span class="q-tag">${q.tema}</span>`;
+  document.getElementById('qText').textContent = q.texto;
+
+  const letters = ['A','B','C','D'];
+  const grid = document.getElementById('optionsGrid');
+  grid.innerHTML = '';
+  q.opciones.forEach((op, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="option-letter">${letters[i]}</span><span>${op}</span>`;
+    btn.onclick = () => selectAnswer(i);
+    grid.appendChild(btn);
+  });
+
+  document.getElementById('feedbackBox').style.display = 'none';
+  document.getElementById('feedbackBox').className = 'feedback-box';
+  document.getElementById('btnNext').style.display = 'none';
+  answered = false;
+}
+
+function selectAnswer(idx) {
+  if (answered) return;
+  answered = true;
+
+  const q = PREGUNTAS[currentQ];
+  const btns = document.querySelectorAll('.option-btn');
+  btns.forEach(b => b.disabled = true);
+
+  const isCorrect = idx === q.correcta;
+  if (isCorrect) score++;
+
+  btns[idx].classList.add(isCorrect ? 'correct' : 'wrong');
+  if (!isCorrect) btns[q.correcta].classList.add('correct');
+
+  const fb = document.getElementById('feedbackBox');
+  fb.className = 'feedback-box ' + (isCorrect ? 'correct' : 'wrong');
+  fb.innerHTML = (isCorrect ? '✅ <strong>¡Correcto!</strong> ' : '❌ <strong>Incorrecto.</strong> ') + q.explicacion;
+  fb.style.display = 'block';
+
+  userAnswers.push({ q: currentQ, selected: idx, correct: q.correcta, isCorrect });
+
+  document.getElementById('btnNext').style.display = 'block';
+  document.getElementById('btnNext').textContent = currentQ < PREGUNTAS.length - 1 ? 'Siguiente →' : 'Ver resultados →';
+}
+
+function nextQuestion() {
+  currentQ++;
+  if (currentQ >= PREGUNTAS.length) {
+    showResults();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResults() {
+  showScreen('screenResults');
+  const total = PREGUNTAS.length;
+  const pct = Math.round(score / total * 100);
+  document.getElementById('scoreNum').textContent = score;
+  document.getElementById('statCorr').textContent = score;
+  document.getElementById('statWrong').textContent = total - score;
+  document.getElementById('statPct').textContent = pct + '%';
+
+  let msg, sub;
+  if (pct >= 90) { msg = '🌟 Excelente'; sub = '¡Dominas la teoría lamarckiana! Nivel sobresaliente.'; }
+  else if (pct >= 70) { msg = '👍 Muy bien'; sub = 'Buen manejo de los contenidos. Sigue repasando.'; }
+  else if (pct >= 50) { msg = '📚 En proceso'; sub = 'Vas por buen camino. Revisa los conceptos clave.'; }
+  else { msg = '🔄 Continúa estudiando'; sub = 'Te recomendamos repasar los postulados de Lamarck.'; }
+
+  document.getElementById('resultMsg').textContent = msg;
+  document.getElementById('resultSub').textContent = sub;
+
+  // Animar anillo
+  const circumference = 427;
+  const offset = circumference - (pct / 100 * circumference);
+  setTimeout(() => {
+    document.getElementById('scoreCircle').style.transition = 'stroke-dashoffset 1.2s ease';
+    document.getElementById('scoreCircle').style.strokeDashoffset = offset;
+  }, 200);
+}
+
+function saveResult() {
+  const data = {
+    nombre: studentName,
+    curso: studentCurso,
+    score: score,
+    total: PREGUNTAS.length,
+    pct: Math.round(score / PREGUNTAS.length * 100),
+    fecha: new Date().toLocaleDateString('es-CL'),
+    timestamp: Date.now()
+  };
+
+  let records = getRecords();
+  // Si ya existe un resultado para este nombre+curso, mantener el mejor
+  const existing = records.findIndex(r => r.nombre === studentName && r.curso === studentCurso);
+  if (existing >= 0) {
+    if (data.score > records[existing].score) {
+      records[existing] = data;
+    }
+  } else {
+    records.push(data);
+  }
+  records.sort((a,b) => b.score - a.score || a.timestamp - b.timestamp);
+  localStorage.setItem('lamarckQuiz_records', JSON.stringify(records));
+  showToast('✅ Resultado guardado exitosamente');
+}
+
+function getRecords() {
+  try {
+    return JSON.parse(localStorage.getItem('lamarckQuiz_records') || '[]');
+  } catch(e) { return []; }
+}
+
+function renderLeaderboard() {
+  const records = getRecords();
+  const podium = document.getElementById('lbPodium');
+  const tbody = document.getElementById('lbBody');
+  const empty = document.getElementById('lbEmpty');
+
+  if (records.length === 0) {
+    podium.innerHTML = '';
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+
+  // Podio
+  const top3 = records.slice(0,3);
+  const classes = ['second','first','third'];
+  const crowns = ['🥈','🥇','🥉'];
+  const order = top3.length >= 3 ? [1,0,2] : top3.length === 2 ? [1,0] : [0];
+
+  podium.innerHTML = '';
+  order.forEach(idx => {
+    if (!top3[idx]) return;
+    const r = top3[idx];
+    const cls = classes[idx];
+    const crown = crowns[idx];
+    const div = document.createElement('div');
+    div.className = `podium-block ${cls}`;
+    div.innerHTML = `
+      <div class="podium-crown">${crown}</div>
+      <div class="podium-name">${r.nombre}</div>
+      <div class="podium-score">${r.score}/${r.total}</div>
+      <div style="font-size:0.75rem; color:var(--muted); margin-top:4px">${r.pct}%</div>
+      <div class="podium-pos">${idx+1}</div>`;
+    podium.appendChild(div);
+  });
+
+  // Tabla
+  tbody.innerHTML = '';
+  records.forEach((r, i) => {
+    const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : '';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><div class="rank-badge ${rankClass}">${i+1}</div></td>
+      <td><strong>${r.nombre}</strong></td>
+      <td><span class="score-pill">${r.score} / ${r.total}</span></td>
+      <td><span class="curso-badge">${r.curso}</span></td>
+      <td>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="pct-bar-bg"><div class="pct-bar-fill" style="width:${r.pct}%"></div></div>
+          <span style="font-family:'Oswald',sans-serif; font-size:0.9rem; color:var(--accent2)">${r.pct}%</span>
+        </div>
+      </td>
+      <td style="color:var(--muted); font-size:0.85rem">${r.fecha}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function clearLeaderboard() {
+  if (confirm('¿Eliminar todos los registros del ranking? Esta acción no se puede deshacer.')) {
+    localStorage.removeItem('lamarckQuiz_records');
+    renderLeaderboard();
+    showToast('🗑 Tabla limpiada');
+  }
+}
+
+function reviewAnswers() {
+  previousScreen = 'screenResults';
+  showScreen('screenReview');
+  const list = document.getElementById('reviewList');
+  list.innerHTML = '';
+  userAnswers.forEach(a => {
+    const q = PREGUNTAS[a.q];
+    const div = document.createElement('div');
+    div.className = `review-item ${a.isCorrect ? 'correct-item' : 'wrong-item'}`;
+    div.innerHTML = `
+      <div class="review-q"><strong>P${a.q+1}.</strong> ${q.texto}</div>
+      <div class="review-answers">
+        <div class="review-ans user-ans"><span class="dot"></span><span>Tu respuesta: ${q.opciones[a.selected]}</span></div>
+        ${!a.isCorrect ? `<div class="review-ans correct-ans"><span class="dot"></span><span>Correcta: ${q.opciones[a.correct]}</span></div>` : ''}
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+function goBack() {
+  showScreen(previousScreen);
+}
+
+function restartQuiz() {
+  showScreen('screenLogin');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>
